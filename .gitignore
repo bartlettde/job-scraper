@@ -1,0 +1,5 @@
+# Ignore idea file
+.idea
+
+# Ignore pycache
+__pycache__/
