@@ -6,9 +6,9 @@ from time import sleep
 job_dict = {}
 
 # Want to change the day and time of the alert? Change the values below
-day_of_alert = 'Thu'  # Just the first three letters of the day
-hour_of_alert = 16  # hours in 24 hr format
-min_of_alert = 57
+day_of_alert = 'Fri'  # Just the first three letters of the day
+hour_of_alert = 10  # hours in 24 hr format
+min_of_alert = 47
 
 
 def ideo_scraper():
@@ -50,6 +50,26 @@ def frog_scraper():
     return frog_dict
 
 
+def ammo_scraper():
+    ammo_dict = {}
+    ammo_url = 'https://ammunitiongroup.com/contact/'
+    ammo_page = requests.get(ammo_url)
+    soup = BeautifulSoup(ammo_page.content, 'html.parser')
+    elements = soup.findAll('div', class_='position-item')
+
+    for items in elements:
+        details = []
+        title_elem = items.find('div', class_='inner-row')
+        location_elem = items.find('div', class_='job-location col-xs-12 col-sm-4 col-md-4 col-lg-4')
+        url_elem = items.find('a', href=True)
+        details.append(title_elem.text)
+        details.append(location_elem.text)
+        details.append(url_elem['href'])
+        ammo_dict[title_elem.text] = details
+
+    return ammo_dict
+
+
 def get_day():
     current_time = datetime.datetime.now()
     return str(current_time.strftime("%a"))
@@ -75,6 +95,7 @@ while True:
     if get_day() == day_of_alert and get_hour() == hour_of_alert and get_min() == min_of_alert and get_sec() == 10:
         job_dict['Ideo'] = ideo_scraper()
         job_dict['Frog'] = frog_scraper()
+        job_dict['Ammunition'] = ammo_scraper()
 
         for x, y in job_dict.items():
             print(x, y)
