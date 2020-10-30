@@ -1,14 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import datetime
-from time import sleep
-
-job_dict = {}
-
-# Want to change the day and time of the alert? Change the values below
-day_of_alert = 'Fri'  # Just the first three letters of the day
-hour_of_alert = 10  # hours in 24 hr format
-min_of_alert = 47
 
 
 def ideo_scraper():
@@ -66,39 +57,4 @@ def ammo_scraper():
         details.append(location_elem.text)
         details.append(url_elem['href'])
         ammo_dict[title_elem.text] = details
-
     return ammo_dict
-
-
-def get_day():
-    current_time = datetime.datetime.now()
-    return str(current_time.strftime("%a"))
-
-
-def get_hour():
-    current_time = datetime.datetime.now()
-    return int(current_time.strftime("%H"))
-
-
-def get_min():
-    current_time = datetime.datetime.now()
-    return int(current_time.strftime("%M"))
-
-
-def get_sec():
-    current_time = datetime.datetime.now()
-    return int(current_time.strftime("%S"))
-
-
-while True:
-    # Want to change the date? Change
-    if get_day() == day_of_alert and get_hour() == hour_of_alert and get_min() == min_of_alert and get_sec() == 10:
-        job_dict['Ideo'] = ideo_scraper()
-        job_dict['Frog'] = frog_scraper()
-        job_dict['Ammunition'] = ammo_scraper()
-
-        for x, y in job_dict.items():
-            print(x, y)
-        sleep(2)
-    else:
-        pass
