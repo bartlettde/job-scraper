@@ -6,6 +6,7 @@ me a list with key information and a link to the application page.
 Below is the list of websites that this project currently scrapes. More employers will be added in future.
 - IDEO
 - Frog Design
+- Ammunition Group
 
 ## Installation
 To install, follow the steps below:
