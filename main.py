@@ -7,6 +7,7 @@ import scraper  # contains all of the functions for scraping the different websi
 import scheduling as sched  # contains al of the functions related to dates and times
 
 job_dict = {}
+emailing_list = []
 
 
 def command_inputs():
@@ -14,33 +15,55 @@ def command_inputs():
         return input('-->')
 
 
-def alarm_func(day, hour, mins):
+def alarm_func(day: str, hour: int, mins: int):
+    print('alarm func called')
     while True:
-        if stop_threads:
-            break
-        if sched.get_day() == day and sched.get_hour() == hour and sched.get_min() == mins and sched.get_sec() == 10:
+        if sched.get_day() == day.capitalize() and sched.get_hour() == hour and sched.get_min() == mins and sched.get_sec() == 10:
+            print('working')
             output()
+        elif stop_threads:
+            break
         else:
             pass
 
 
 def output():
-    if not scraper.ideo_scraper() or not scraper.frog_scraper() or not scraper.ammo_scraper():
-        print('\nThere is a connection issue and the update has not been sent. Reconnect your device to '
-              'the internet and the type "retry" into the console.')
-        sleep(2)
+    if not scraper.ideo_scraper():
+        job_dict['Ideo'] = 'Failed to load'
     else:
         job_dict['Ideo'] = scraper.ideo_scraper()
-        job_dict['Frog'] = scraper.frog_scraper()
-        job_dict['Ammunition'] = scraper.ammo_scraper()
 
-        for x, y in job_dict.items():
-            print(x, y)
-        sleep(2)
+    if not scraper.frog_scraper():
+        job_dict['Frog'] = 'Failed to load'
+    else:
+        job_dict['Frog'] = scraper.frog_scraper()
+
+    if not scraper.ammo_scraper():
+        job_dict['Ammo'] = 'Failed to load'
+    else:
+        job_dict['Ammo'] = scraper.ammo_scraper()
+
+    for x, y in job_dict.items():
+        print(x, y)
+    sleep(2)
+
+
+def add_recipient(email):
+    emailing_list.append(email)
+    print(email + 'successfully added')
+
+
+def remove_recipient(email):
+    if email in emailing_list:
+        emailing_list.remove(email)
+        print(email + 'successfully added')
+    else:
+        print('Address provided could not be found in list. Try again or use "show_list" command to see all of the '
+              'items in the emailing list')
 
 
 def main():
-    day_of_alert = sched.change_day()
+    day_of_alert = str(sched.change_day())
     hour_of_alert = int(sched.change_hour())
     min_of_alert = int(sched.change_mins())
 
@@ -62,7 +85,7 @@ def main():
             elif return_value == 'help':
                 print('Commands:')
                 print('help - Provides a list of supported commands')
-                print('retry - Sends an update immediately')
+                print('test - Sends an update immediately')
                 print('change_time - Allows user to change the time of the update')
                 print('quit - Stops the program')
 
@@ -70,8 +93,20 @@ def main():
                 stop_threads = True
                 main()
 
-            elif return_value == 'retry':
+            elif return_value == 'test':
                 output()
+
+            elif return_value == 'add_to_list':
+                user_email = input('Please input the new email address:')
+                add_recipient(user_email)
+
+            elif return_value == 'show_list':
+                for i in emailing_list:
+                    print(i)
+
+            elif return_value == 'remove_from_list':
+                user_email = input('Please input the address you would like to remove:')
+                remove_recipient(user_email)
 
             else:
                 print('Command not supported, please try again or type "help" for a list of supported commands')
