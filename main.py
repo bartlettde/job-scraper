@@ -7,6 +7,7 @@ import scraper  # contains all of the functions for scraping the different websi
 import scheduling as sched  # contains al of the functions related to dates and times
 
 job_dict = {}
+emailing_list = []
 
 
 def command_inputs():
@@ -47,6 +48,20 @@ def output():
     sleep(2)
 
 
+def add_recipient(email):
+    emailing_list.append(email)
+    print(email + 'successfully added')
+
+
+def remove_recipient(email):
+    if email in emailing_list:
+        emailing_list.remove(email)
+        print(email + 'successfully added')
+    else:
+        print('Address provided could not be found in list. Try again or use "show_list" command to see all of the '
+              'items in the emailing list')
+
+
 def main():
     day_of_alert = str(sched.change_day())
     hour_of_alert = int(sched.change_hour())
@@ -80,6 +95,18 @@ def main():
 
             elif return_value == 'test':
                 output()
+
+            elif return_value == 'add_to_list':
+                user_email = input('Please input the new email address:')
+                add_recipient(user_email)
+
+            elif return_value == 'show_list':
+                for i in emailing_list:
+                    print(i)
+
+            elif return_value == 'remove_from_list':
+                user_email = input('Please input the address you would like to remove:')
+                remove_recipient(user_email)
 
             else:
                 print('Command not supported, please try again or type "help" for a list of supported commands')
