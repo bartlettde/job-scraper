@@ -2,9 +2,11 @@ from time import sleep
 import concurrent.futures
 import threading
 import sys
+from getpass import getpass
 
 import scraper  # contains all of the functions for scraping the different websites
-import scheduling as sched  # contains al of the functions related to dates and times
+import scheduling as sched  # contains all of the functions related to dates and times
+import email_sender  # contains the functions for sending the email update
 
 job_dict = {}
 emailing_list = []
@@ -16,10 +18,8 @@ def command_inputs():
 
 
 def alarm_func(day: str, hour: int, mins: int):
-    print('alarm func called')
     while True:
         if sched.get_day() == day.capitalize() and sched.get_hour() == hour and sched.get_min() == mins and sched.get_sec() == 10:
-            print('working')
             output()
         elif stop_threads:
             break
@@ -28,29 +28,34 @@ def alarm_func(day: str, hour: int, mins: int):
 
 
 def output():
-    if not scraper.ideo_scraper():
-        job_dict['Ideo'] = 'Failed to load'
+    if len(emailing_list) == 0:
+        print('There seems to be no address in the mailing list. Use the add recipient command to add addresses.')
+        sleep(2)
+        return
     else:
-        job_dict['Ideo'] = scraper.ideo_scraper()
+        print('Scraping')
+        if not scraper.ideo_scraper():
+            job_dict['Ideo'] = 'Failed to access page'
+        else:
+            job_dict['Ideo'] = scraper.ideo_scraper()
 
-    if not scraper.frog_scraper():
-        job_dict['Frog'] = 'Failed to load'
-    else:
-        job_dict['Frog'] = scraper.frog_scraper()
+        if not scraper.frog_scraper():
+            job_dict['Frog'] = 'Failed to access page'
+        else:
+            job_dict['Frog'] = scraper.frog_scraper()
 
-    if not scraper.ammo_scraper():
-        job_dict['Ammo'] = 'Failed to load'
-    else:
-        job_dict['Ammo'] = scraper.ammo_scraper()
+        if not scraper.ammo_scraper():
+            job_dict['Ammo'] = 'Failed to access page'
+        else:
+            job_dict['Ammo'] = scraper.ammo_scraper()
 
-    for x, y in job_dict.items():
-        print(x, y)
-    sleep(2)
+        email_sender.send_email(job_dict, sender, emailing_list, password)
 
 
-def add_recipient(email):
-    emailing_list.append(email)
-    print(email + 'successfully added')
+def add_recipient():
+    user_email = input('Please input the new email address:')
+    emailing_list.append(user_email)
+    print(user_email + ' successfully added')
 
 
 def remove_recipient(email):
@@ -66,6 +71,8 @@ def main():
     day_of_alert = str(sched.change_day())
     hour_of_alert = int(sched.change_hour())
     min_of_alert = int(sched.change_mins())
+
+    add_recipient()
 
     global stop_threads
     stop_threads = False
@@ -97,8 +104,7 @@ def main():
                 output()
 
             elif return_value == 'add_to_list':
-                user_email = input('Please input the new email address:')
-                add_recipient(user_email)
+                add_recipient()
 
             elif return_value == 'show_list':
                 for i in emailing_list:
@@ -114,4 +120,10 @@ def main():
 
 
 if __name__ == '__main__':
+    global sender
+    global password
+
+    sender = input('Please insert the email address you would like to send the email from:')
+    password = getpass('Please insert the password for the email address:')
+
     main()
