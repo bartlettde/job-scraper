@@ -72,6 +72,17 @@ def remove_recipient(email):
               'items in the emailing list')
 
 
+def help_command():
+    print('Commands:')
+    print('help - Provides a list of supported commands')
+    print('test - Sends an update immediately')
+    print('change_time - Allows user to change the time of the update')
+    print('add_to_list - Allows user to insert a new name into the email list')
+    print('show_list - Allows user to view the entire emailing list')
+    print('remove_from_list - Allows user to remove a specific email from the list')
+    print('quit - Stops the program')
+
+
 def main():
     day_of_alert = str(sched.change_day())
     hour_of_alert = int(sched.change_hour())
@@ -81,6 +92,8 @@ def main():
 
     global stop_threads
     stop_threads = False
+
+    help_command()
 
     x = threading.Thread(target=alarm_func, args=(day_of_alert, hour_of_alert, min_of_alert))
     x.start()
@@ -95,11 +108,7 @@ def main():
                 sys.exit()
 
             elif return_value == 'help':
-                print('Commands:')
-                print('help - Provides a list of supported commands')
-                print('test - Sends an update immediately')
-                print('change_time - Allows user to change the time of the update')
-                print('quit - Stops the program')
+                help_command()
 
             elif return_value == 'change_time':
                 stop_threads = True
@@ -131,7 +140,7 @@ if __name__ == '__main__':
         print(bob_jot.renderText('Bob Jot!'))
     else:
         print('Bob Jot!')
-    print('The Web Scraping Job Bot')
+    print('The Web Scraping, Job Bot')
 
     global sender
     global password
