@@ -3,6 +3,11 @@ import concurrent.futures
 import threading
 import sys
 from getpass import getpass
+try:
+    import pyfiglet
+    pyfig_lib = True
+except ImportError:
+    pyfig_lib = False
 
 import scraper  # contains all of the functions for scraping the different websites
 import scheduling as sched  # contains all of the functions related to dates and times
@@ -120,10 +125,18 @@ def main():
 
 
 if __name__ == '__main__':
+    print('Welcome to...')
+    if pyfig_lib:
+        bob_jot = pyfiglet.Figlet(font='larry3d')
+        print(bob_jot.renderText('Bob Jot!'))
+    else:
+        print('Bob Jot!')
+    print('The Web Scraping Job Bot')
+
     global sender
     global password
 
-    sender = input('Please insert the email address you would like to send the email from:')
+    sender = input('Please insert the email address you would like to send the update emails from:')
     password = getpass('Please insert the password for the email address:')
 
     main()
