@@ -8,5 +8,9 @@ Below is the list of websites that this project currently scrapes. More employer
 - Frog Design
 - Ammunition Group
 
+## Prerequisite
+Using Pip, install these packages before trying to install:
+- Beautiful Soup 4
+
 ## Installation
 To install, follow the steps below:
