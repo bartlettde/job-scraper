@@ -23,7 +23,8 @@ def ideo_scraper():
         return ideo_dict
 
     except requests.exceptions.ConnectionError:
-        return False
+        ideo_dict['error'] = 'Failed to access Ideos website'
+        return ideo_dict
 
 
 def frog_scraper():
@@ -47,7 +48,9 @@ def frog_scraper():
         return frog_dict
 
     except requests.exceptions.ConnectionError:
-        return False
+        frog_dict['error'] = 'Failed to access Frogs website'
+
+        return frog_dict
 
 
 def ammo_scraper():
@@ -71,4 +74,5 @@ def ammo_scraper():
         return ammo_dict
 
     except requests.exceptions.ConnectionError:
-        return False
+        ammo_dict['error'] = 'Failed to access Ammunition Groups website'
+        return ammo_dict

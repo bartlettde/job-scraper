@@ -17,6 +17,16 @@ job_dict = {}
 emailing_list = []
 
 
+def sender():
+    global sender_var
+    sender_var = input('Please insert the email address you would like to send the update emails from:')
+
+
+def password():
+    global password_var
+    password_var = getpass('Please insert the password for the email address:')
+
+
 def command_inputs():
     while True:
         return input('-->')
@@ -39,22 +49,12 @@ def output():
         return
     else:
         print('Scraping')
-        if not scraper.ideo_scraper():
-            job_dict['Ideo'] = 'Failed to access page'
-        else:
-            job_dict['Ideo'] = scraper.ideo_scraper()
 
-        if not scraper.frog_scraper():
-            job_dict['Frog'] = 'Failed to access page'
-        else:
-            job_dict['Frog'] = scraper.frog_scraper()
+        job_dict['Ideo'] = scraper.ideo_scraper()
+        job_dict['Frog'] = scraper.frog_scraper()
+        job_dict['Ammo'] = scraper.ammo_scraper()
 
-        if not scraper.ammo_scraper():
-            job_dict['Ammo'] = 'Failed to access page'
-        else:
-            job_dict['Ammo'] = scraper.ammo_scraper()
-
-        email_sender.send_email(job_dict, sender, emailing_list, password)
+        email_sender.send_email(job_dict, sender_var, emailing_list, password_var)
 
 
 def add_recipient():
@@ -77,9 +77,11 @@ def help_command():
     print('help - Provides a list of supported commands')
     print('test - Sends an update immediately')
     print('change_time - Allows user to change the time of the update')
-    print('add_to_list - Allows user to insert a new name into the email list')
+    print('add_to_list - Allows user to insert a new email address into the emailing list')
     print('show_list - Allows user to view the entire emailing list')
     print('remove_from_list - Allows user to remove a specific email from the list')
+    print('change_email - Allows user to change the sender email address')
+    print('change_password - Allows users to change their password')
     print('quit - Stops the program')
 
 
@@ -128,6 +130,12 @@ def main():
                 user_email = input('Please input the address you would like to remove:')
                 remove_recipient(user_email)
 
+            elif return_value == 'change_email':
+                sender()
+
+            elif return_value == 'change_password':
+                password()
+
             else:
                 print('Command not supported, please try again or type "help" for a list of supported commands')
                 pass
@@ -137,15 +145,12 @@ if __name__ == '__main__':
     print('Welcome to...')
     if pyfig_lib:
         bob_jot = pyfiglet.Figlet(font='larry3d')
-        print(bob_jot.renderText('Bob Jot!'))
+        print(bob_jot.renderText('Bob Jot !'))
     else:
         print('Bob Jot!')
     print('The Web Scraping, Job Bot')
 
-    global sender
-    global password
-
-    sender = input('Please insert the email address you would like to send the update emails from:')
-    password = getpass('Please insert the password for the email address:')
+    sender()
+    password()
 
     main()
