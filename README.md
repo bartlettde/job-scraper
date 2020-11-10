@@ -1,6 +1,5 @@
 # Job Scraper
-The goal of this project is to create a program that periodically checks the website of a number of specific companies for job opportunities and then send 
-me a list with key information and a link to the application page. To learn more about this project, I wrote a brief blog post about the process and the decisions I made.
+The goal of this project is to create a program that periodically checks the website of a number of specific companies for job opportunities and then send me a list with key information and a link to the application page. To learn more about this project, I wrote a brief blog post about the process and the decisions I made, which can be found [here](https://www.dbartlett.co.uk/).
 
 ## Current Companies Supported
 Below is the list of websites that this project currently scrapes. More employers may be added in future.
