@@ -10,7 +10,7 @@ Below is the list of websites that this project currently scrapes. More employer
 ## Prerequisite
 Using Pip, install these packages before trying to install:
 - Beautiful Soup 4 (Webscraping library)
-- Pyfiglet (Optional - Creates a cool ASCII banner on startup
+- Pyfiglet (Optional - Creates a cool ASCII banner on startup)
 
 ## Installation
 The guide below talks through the process of installing this program on a Raspberry Pi, however these steps should work for any set up.
@@ -23,8 +23,6 @@ To install, follow the steps below:
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
